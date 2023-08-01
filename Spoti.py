@@ -12,26 +12,24 @@ def clean_song_name(song_name):
 def get_spotify_track_id(sp, song_name, artist_name):
     query = f"track:{song_name} artist:{artist_name}"
     result = sp.search(q=query, type='track', limit=1)
-
     if result['tracks']['items']:
         return result['tracks']['items'][0]['id']
-
     print(f"Spotify track ID not found for '{song_name}' by '{artist_name}'.")
     return None
 
-
-def create_spotify_playlist(songs, playlist_name):
-    # Authenticate the user and create a new playlist
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=SPOTIPY_CLIENT_ID,client_secret=SPOTIPY_CLIENT_SECRET,redirect_uri=SPOTIPY_REDIRECT_URI,scope='playlist-modify-public'))
+def create_spotify_playlist(songs, artist_name):
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET, redirect_uri=SPOTIPY_REDIRECT_URI, scope='playlist-modify-public'))
     try:
-        # Get the user ID
         user_id = sp.me()['id']
-
-        # Create the playlist
+        playlist_name = (f"{artist_name} Most played songs")
         playlist = sp.user_playlist_create(user=user_id, name=playlist_name, public=True)
-        # Get the track URIs or IDs from the songs list
-        song_uris_or_ids = [f"spotify:track:{song_id}" for song_id, _ in songs]
-        # Add the tracks to the playlist
+        cleaned_songs = [(clean_song_name(song), count) for song, count in songs]
+        track_ids = []
+        for song, _ in cleaned_songs:
+            track_id = get_spotify_track_id(sp, song, artist_name)
+            if track_id:
+                track_ids.append((track_id, 1))
+        song_uris_or_ids = [f"spotify:track:{song_id}" for song_id, _ in track_ids]
         sp.playlist_add_items(playlist_id=playlist['id'], items=song_uris_or_ids)
         print(f"Playlist '{playlist_name}' created with {len(songs)} tracks.")
         print(f"View the playlist here: {playlist['external_urls']['spotify']}")

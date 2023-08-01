@@ -4,13 +4,12 @@ from Key import SETLIST_API_KEY
 
 SETLIST_API_BASE_URL = 'https://api.setlist.fm/rest/1.0/'
 
-def get_most_played_songs(artist_mbid):
-    url = f"{SETLIST_API_BASE_URL}artist/{artist_mbid}/setlists"
+def get_most_played_songs(artist_id):
+    url = f"{SETLIST_API_BASE_URL}artist/{artist_id}/setlists"
     headers = {'x-api-key': SETLIST_API_KEY}
     try:
         response = requests.get(url, headers=headers)
         response.raise_for_status()
-        # Parse the XML response
         root = ET.fromstring(response.content)
         songs_counter = {}
         for setlist in root.findall('.//setlist'):
