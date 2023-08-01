@@ -22,7 +22,7 @@ def get_spotify_track_id(sp, song_name, artist_name):
 
 def create_spotify_playlist(songs, playlist_name):
     # Authenticate the user and create a new playlist
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=SPOTIPY_CLIENT_ID,                                                   client_secret=SPOTIPY_CLIENT_SECRET,                                                  redirect_uri=SPOTIPY_REDIRECT_URI,                                                   scope='playlist-modify-public'))
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=SPOTIPY_CLIENT_ID,client_secret=SPOTIPY_CLIENT_SECRET,redirect_uri=SPOTIPY_REDIRECT_URI,scope='playlist-modify-public'))
     try:
         # Get the user ID
         user_id = sp.me()['id']
