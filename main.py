@@ -17,3 +17,4 @@ def ask_MBID():
 
 if __name__ == '__main__':
     ask_MBID()
+    input("Press Enter to exit...")
