@@ -1,3 +1,4 @@
+from spotipy.oauth2 import SpotifyOAuth
 from SetlistAPI import get_most_played_songs
 from CreateSpoti import create_spotify_playlist
 from DeleteTracksSpoti import delete_tracks_from_playlist
@@ -28,7 +29,6 @@ def AskFunction():
             print("Invalid choice. Please select a valid option.")
 
 def AskMBID():
-    artist_name = input('Artist Name: ')
     artist_id = input('Artist MBID Number: ')
     most_played_songs = get_most_played_songs(artist_id)
     if most_played_songs:
@@ -37,7 +37,7 @@ def AskMBID():
             print(f"{song}: {count} times")
         createplaylistquest = input('Create playlist? y/n ')
         if createplaylistquest.lower() == 'y':
-            create_spotify_playlist(most_played_songs, artist_name)
+            create_spotify_playlist(most_played_songs)
     else:
         print("No setlist data found for this artist.")
 
